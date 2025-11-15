@@ -1,19 +1,15 @@
-
 import Hero from '@/components/hero/hero';
-import Image from 'next/image';
-
+import {Logotype} from '@/components/logotype/logotype';
 export default function Home({}: {} ) {
   return (
     <div>
-      <Hero imageSrc="/start_bg.png" options={{ roundedBottom: true, height: '600px' }}>
-        <Image src="/logotype.png" alt="Logo" width={200} height={200} />
-      </Hero>
+      <Logotype />
       <h1>Welcome to MyChipsWeb!</h1>
       <p>Get started by clicking the button below.</p>
       <a href="/create-table">
-        <button>Create table</button>
+        <button className='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'>Create table</button>
       </a>
     </div>
   );
 }
-  
+
