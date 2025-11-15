@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --max-mobile-width: 640px;
+  --background: #fdfdfd;
+  --font-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1A1819;
+    --font-color: #fff;
+  }
+}
+
+body {
+  color: var(--font-color);
+  background: var(--background);
+}

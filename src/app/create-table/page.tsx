@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import ReduxWrapper  from '@/components/rexux-wrapper';
+
 const CreateTable = () => {
   const [alias, setAlias] = useState('');
   const [playersJoined, setPlayersJoined] = useState(0);
@@ -30,22 +30,20 @@ const CreateTable = () => {
   };
 
   return (
-    <ReduxWrapper>
+    <div>
+        <form onSubmit={handleFormSubmit}>
+        <label>
+          Alias:
+          <input type="text" value={alias} onChange={handleAliasChange} />
+        </label>
+        <button type="submit">Create Table</button>
+      </form>
       <div>
-          <form onSubmit={handleFormSubmit}>
-          <label>
-            Alias:
-            <input type="text" value={alias} onChange={handleAliasChange} />
-          </label>
-          <button type="submit">Create Table</button>
-        </form>
-        <div>
-          <img src={`https://api.qrserver.com/v1/create-qr-code/?data=/join:${invitationId}`} alt="QR Code" />
-        </div>
-        <p>{playersJoined} players have joined the table.</p>
-        <button onClick={handleCreateTable}>Create a Table</button>
+        <img src={`https://api.qrserver.com/v1/create-qr-code/?data=/join:${invitationId}`} alt="QR Code" />
       </div>
-    </ReduxWrapper>
+      <p>{playersJoined} players have joined the table.</p>
+      <button onClick={handleCreateTable}>Create a Table</button>
+    </div>
   );
 };
 
