@@ -1,5 +1,7 @@
 'use client'
 
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import React, { useState } from 'react';
 
 const CreateTable = () => {
@@ -30,7 +32,8 @@ const CreateTable = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col p-4 items-center">
+      <Card className="p-4 flex flex-col items-center gap-4">
         <form onSubmit={handleFormSubmit}>
         <label>
           Alias:
@@ -42,7 +45,8 @@ const CreateTable = () => {
         <img src={`https://api.qrserver.com/v1/create-qr-code/?data=/join:${invitationId}`} alt="QR Code" />
       </div>
       <p>{playersJoined} players have joined the table.</p>
-      <button onClick={handleCreateTable}>Create a Table</button>
+      <Button onClick={handleCreateTable}>Create a Table</Button>
+      </Card>
     </div>
   );
 };
