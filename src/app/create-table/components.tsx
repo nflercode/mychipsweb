@@ -8,7 +8,6 @@ import { InvitationId } from '@/types';
 import { useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { toast } from 'sonner';
-import { useUrl } from 'nextjs-current-url';
 
 const handleFormSubmit = (event: React.FormEvent) => {
   event.preventDefault();
