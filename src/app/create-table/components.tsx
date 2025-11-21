@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { InvitationId } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { toast } from 'sonner';
+import { useUrl } from 'nextjs-current-url';
+
 const handleFormSubmit = (event: React.FormEvent) => {
   event.preventDefault();
   // Handle form submission logic here
@@ -23,6 +25,8 @@ const handleCreateTable = () => {
 
 export function CreateGameForm({invitationId}: { invitationId?: InvitationId }) {
   const [alias, setAlias] = useState('');
+  const [joinLink, setJoinLink] = useState('');
+
   if(!invitationId) {
     return (
       <>
@@ -34,7 +38,12 @@ export function CreateGameForm({invitationId}: { invitationId?: InvitationId }) 
     );
   }
 
-  const joinLink = invitationId ? `${window.location.origin}/join-table/${invitationId}` : '';
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      setJoinLink(`${origin}/join/${invitationId}`);
+    }
+  }, [invitationId]);
 
   return (
     <>
