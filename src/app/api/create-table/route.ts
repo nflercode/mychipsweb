@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Get poker table data in create mode from an id
+ * @param request 
+ * @returns 
+ */
 export async function GET(request: NextRequest) {
     try {
         const cookieStore = request.cookies;

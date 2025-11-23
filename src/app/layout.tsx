@@ -7,7 +7,7 @@ const poppins = Poppins({ weight: '400', subsets: ['latin']})
 
 export const metadata: Metadata = {
   title: 'My chips online - poker app',
-  description: 'Poker app for keeping track on poker chips for home games'
+  description: 'Poker app for keeping track on poker chips for games at home, invite your friends and play with virtual chips!',
 }
 
 export default function RootLayout({
