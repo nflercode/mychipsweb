@@ -1,4 +1,35 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(request: NextRequest) {
+    try {
+        const cookieStore = request.cookies;
+        const tableId = (await cookieStore).get('poker_table_id')?.value;
+
+        if (!tableId) {
+            return NextResponse.json({ error: `No table ID provided` }, { status: 400 });
+        }
+
+        const apiKeyValue = process.env.NEXT_EXTERNAL_POKER_API_KEY;
+        if (!apiKeyValue) {
+            console.error("EXTERNAL_POKER_API_KEY is undefined!");
+            return NextResponse.json({ error: `BFF Configuration Error` }, { status: 500 });
+        }
+        const response = await fetch(`${process.env.NEXT_API_BASE_URL}/poker/table?id=${tableId}`, {
+            method: 'GET',
+            headers: {
+                'x-api-key': apiKeyValue
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch table: ${response.status}`);
+        }
+        const responseData = await response.json();
+
+        return NextResponse.json(responseData, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    }
+}
 
 /**
  * Call mychips BFF to create a poker table in the external mychips api
@@ -9,12 +40,13 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const requestBody = await request.json();
-        const apiKeyValue = process.env.EXTERNAL_POKER_API_KEY;
+        const cookies = request.cookies;
+        const apiKeyValue = process.env.NEXT_EXTERNAL_POKER_API_KEY;
 
       if (!apiKeyValue) {
         // Detta borde hanteras i din inledande konfiguration, men är en bra fallback
         console.error("EXTERNAL_POKER_API_KEY är odefinierad!");
-        return new Response(`Error: BFF Configuration Error`, { status: 500 });
+        return NextResponse.json({ error: `BFF Configuration Error` }, { status: 500 });
 
       }
         const response = await fetch(`${process.env.NEXT_API_BASE_URL}/poker/table`, {
@@ -29,8 +61,10 @@ export async function POST(request: NextRequest) {
             throw new Error(`Failed to create table: ${response.status}`);
         }
         const responseData = await response.json();
-        return new Response(JSON.stringify(responseData), { status: 200 });
+        cookies.set('poker_table_id', responseData.id);
+        cookies.set('play_id', responseData.playId);
+        return NextResponse.json(responseData, { status: 200 });
     } catch (error) {
-        return new Response(`Error: ${(error as Error).message}`, { status: 500 });
+        return NextResponse.json({ error: (error as Error).message }, { status: 500 });
     }
 } 
