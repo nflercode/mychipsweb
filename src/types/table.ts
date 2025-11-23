@@ -9,4 +9,6 @@ export default interface Table {
     winnerHand: string;
     winnerHandRank: number;
     winnerHandDescription: string;
+    myRole: 'host' | 'player' | 'spectator';
+    invitationId?: string;
 }

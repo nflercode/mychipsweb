@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 export default function Home({}: {} ) {
   return (
-    <div className="flex flex-col p-4 items-center">
-      <Card className="p-4 flex flex-col items-center gap-4">
+    <div className="flex flex-col p-4 items-center mt-4">
+      <Card className="p-4 flex flex-col items-center gap-4 w-[300px]">
         <h1><Logotype /></h1>
         <a href="/create-table">
           <Button className=''>Create table</Button>

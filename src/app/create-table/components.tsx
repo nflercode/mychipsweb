@@ -22,19 +22,23 @@ const handleCreateTable = () => {
   // Handle create table logic here
 };
 
-export function CreateGameForm({invitationId}: { invitationId?: InvitationId }) {
-  const [alias, setAlias] = useState('');
-  const [joinLink, setJoinLink] = useState('');
-
-  if(!invitationId) {
-    return (
-      <>
+export function CreateGameFormLoading() {
+  return (
+    <>
         <Skeleton className="w-[256px] h-[256px]" />
         <Skeleton className="pt-6 w-[128px] h-[32px]" />
         <Skeleton className="pt-4 w-[256px] h-[24px]" />
         <Skeleton className="pt-6 w-[128px] h-[32px]" />
       </>
-    );
+  );
+}
+
+export function CreateGameForm({invitationId}: { invitationId?: InvitationId }) {
+  const [alias, setAlias] = useState('');
+  const [joinLink, setJoinLink] = useState('');
+
+  if(!invitationId) {
+    return <CreateGameFormLoading />;
   }
 
   useEffect(() => {
