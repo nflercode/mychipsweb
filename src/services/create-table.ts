@@ -1,3 +1,5 @@
+import { PokerDataResponse } from "@/types";
+
 export const createTable = async (tableData: any) => {
 
     const baseRoute = process.env.NEXT_APP_BASE_URL;
@@ -12,8 +14,8 @@ export const createTable = async (tableData: any) => {
     if(!response.ok) {
       throw new Error(`Failed to create table: ${response.status}`);
     }
-    
-    return await response.json();
+    const serverresponse = await response.json() as PokerDataResponse;
+    return serverresponse;
 }
 
 export const getTable = async () => {
