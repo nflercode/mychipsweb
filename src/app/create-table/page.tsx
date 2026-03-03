@@ -4,7 +4,7 @@
 
 import { Card } from '@/components/ui/card';
 import { CreateGameForm } from './components';
-import type {InvitationId} from '@/types';
+import type {InvitationId, PokerDataResponse} from '@/types';
 import { cookies } from 'next/headers';
 import { getTable, createTable } from '@/services/create-table';
 import { redirect } from 'next/navigation';
@@ -18,20 +18,20 @@ const CreateTable = async () => {
   const cookieStore = cookies();
   const existingTableId = (await cookieStore).get('poker_table_id')?.value;
 
-  let tableData: Table;
+  let tableData: PokerDataResponse;
   try {
     if (existingTableId) {
       tableData = await getTable();
-      invitationId = tableData.invitationId;
-      if (tableData.myRole !== 'host') {
-        redirect(`/table/${existingTableId}`);
-      }
+      invitationId = tableData.pokerTable.invitationId;
+     // if (tableData.myRole !== 'host') {
+     //   redirect(`/table/${existingTableId}`);
+     // }
     } else {
-      tableData = await createTable({ /* table data here */ });
+      tableData = await createTable({ alias: "Host" });
+      console.log("Created table data:", tableData);
     }
   } catch (error) {
     console.error("Serverside Error:", error);
-
 
     return (
       <div className="flex flex-col p-4 items-center">
@@ -50,7 +50,14 @@ const CreateTable = async () => {
     <div className="flex flex-col p-4 items-center">
       <Card className="p-4 flex flex-col items-center gap-4">
       <h1 className="text-2xl font-bold mb-4 text-left">Create table</h1>
-        <CreateGameForm invitationId={invitationId} />
+        <CreateGameForm invitationId={tableData.pokerTable.invitationId} />
+      </Card>
+      <Card className="p-4 flex flex-col items-center gap-4">
+        <h1 className="text-2xl font-bold mb-4 text-left">You have joined the table! [debugging]</h1>
+        <ul>
+          <li><strong>Invitation ID:</strong> {tableData.pokerTable.invitationId}</li>
+          <li><strong>Players:</strong> {tableData.game.players.map(p => p.alias).join(', ')}</li>
+        </ul>
       </Card>
     </div>
   );

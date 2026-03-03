@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { createTable } from '@/services/create-table';
 import { getTable } from '@/services/join';
+import { PokerDataResponse } from '@/types/pokerdata';
 import Link from 'next/dist/client/link';
 import { notFound, redirect } from 'next/navigation';
 
@@ -20,8 +21,8 @@ export default async function Page({
   }
 
   try {
-      tableData = await getTable({ invitationId });
-      redirect(`/table/${tableData.id}`);
+      tableData = await getTable({ invitationId, alias: "Player" }) as PokerDataResponse;
+      // redirect(`/table/${tableData.id}`);
     } catch (error) {
       console.error("Serverside Error:", error);
 
@@ -37,6 +38,20 @@ export default async function Page({
         </div>
       );
     }
+
+  if(tableData) {
+    return (
+      <div className="flex flex-col p-4 items-center">
+        <Card className="p-4 flex flex-col items-center gap-4">
+          <h1 className="text-2xl font-bold mb-4 text-left">You have joined the table! [debugging]</h1>
+          <ul>
+            <li><strong>Invitation ID:</strong> {tableData.pokerTable.invitationId}</li>
+            <li><strong>Players:</strong> {tableData.game.players.map(p => p.alias).join(', ')}</li>
+          </ul>
+        </Card>
+        </div>
+    )
+  }
 
   return (
     <div className="flex flex-col p-4 items-center">

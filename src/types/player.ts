@@ -1,6 +1,6 @@
 export default interface Player {
     id: number;
-    name: string;
+    alias: string;
     chips: number;
     bet: number;
     hand: string;

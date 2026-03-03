@@ -1,3 +1,4 @@
+import { PokerDataResponse } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -9,7 +10,12 @@ export async function GET(request: NextRequest) {
     try {
         const cookieStore = request.cookies;
         const tableId = (await cookieStore).get('poker_table_id')?.value;
+        const authToken = (await cookieStore).get('auth_token')?.value;
 
+        if (!authToken) {
+            return NextResponse.json({ error: `Unauthorized` }, { status: 401 });
+        } 
+        
         if (!tableId) {
             return NextResponse.json({ error: `No table ID provided` }, { status: 400 });
         }
@@ -19,17 +25,18 @@ export async function GET(request: NextRequest) {
             console.error("EXTERNAL_POKER_API_KEY is undefined!");
             return NextResponse.json({ error: `BFF Configuration Error` }, { status: 500 });
         }
-        const response = await fetch(`${process.env.NEXT_API_BASE_URL}/poker/table?id=${tableId}`, {
+        const response = await fetch(`${process.env.NEXT_API_BASE_URL}/poker/table`, {
             method: 'GET',
             headers: {
-                'x-api-key': apiKeyValue
+                'x-api-key': apiKeyValue,
+                'Authorization': `Bearer ${authToken}`
             }
         });
         if (!response.ok) {
             throw new Error(`Failed to fetch table: ${response.status}`);
         }
         const responseData = await response.json();
-
+        
         return NextResponse.json(responseData, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message }, { status: 500 });
@@ -50,7 +57,7 @@ export async function POST(request: NextRequest) {
 
       if (!apiKeyValue) {
         // Detta borde hanteras i din inledande konfiguration, men är en bra fallback
-        console.error("EXTERNAL_POKER_API_KEY är odefinierad!");
+        console.error("EXTERNAL_POKER_API_KEY is not defined in .env!");
         return NextResponse.json({ error: `BFF Configuration Error` }, { status: 500 });
 
       }
@@ -58,16 +65,17 @@ export async function POST(request: NextRequest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': apiKeyValue
+                'x-api-key': apiKeyValue,
             },
             body: JSON.stringify(requestBody),
         });
         if (!response.ok) {
             throw new Error(`Failed to create table: ${response.status}`);
         }
-        const responseData = await response.json();
-        cookies.set('poker_table_id', responseData.id);
-        cookies.set('play_id', responseData.playId);
+        const responseData = await response.json() as PokerDataResponse; 
+        cookies.set('poker_table_id', responseData.pokerTable.invitationId);
+        cookies.set('auth_token', responseData.auth.token);
+
         return NextResponse.json(responseData, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message }, { status: 500 });

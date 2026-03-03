@@ -1,7 +1,11 @@
-export const getTable = async ({ invitationId }: { invitationId: string }) => {
+export const getTable = async ({ invitationId, alias }: { invitationId: string, alias: string }) => {
     const baseRoute = process.env.NEXT_APP_BASE_URL;
-    const response = await fetch(`${baseRoute}/api/join?invitationId=${invitationId}`, {
-        method: 'GET',
+    const response = await fetch(`${baseRoute}/api/join`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ invitationId, alias }),
     });
 
     if(!response.ok) {
