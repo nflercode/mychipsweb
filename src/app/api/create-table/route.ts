@@ -56,10 +56,8 @@ export async function POST(request: NextRequest) {
         const apiKeyValue = process.env.NEXT_EXTERNAL_POKER_API_KEY;
 
       if (!apiKeyValue) {
-        // Detta borde hanteras i din inledande konfiguration, men är en bra fallback
         console.error("EXTERNAL_POKER_API_KEY is not defined in .env!");
         return NextResponse.json({ error: `BFF Configuration Error` }, { status: 500 });
-
       }
         const response = await fetch(`${process.env.NEXT_API_BASE_URL}/poker/table`, {
             method: 'POST',
