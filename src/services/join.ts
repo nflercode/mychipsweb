@@ -1,5 +1,5 @@
 export const getTable = async ({ invitationId, alias }: { invitationId: string, alias: string }) => {
-    const baseRoute = process.env.NEXT_APP_BASE_URL;
+    const baseRoute = process.env.NEXT_PUBLIC_APP_BASE_URL || '';
     const response = await fetch(`${baseRoute}/api/join`, {
         method: 'POST',
         headers: {

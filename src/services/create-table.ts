@@ -2,7 +2,7 @@ import { PokerDataResponse } from "@/types";
 
 export const createTable = async (tableData: any) => {
 
-    const baseRoute = process.env.NEXT_APP_BASE_URL;
+    const baseRoute = process.env.NEXT_PUBLIC_APP_BASE_URL || '';
     const response = await fetch(`${baseRoute}/api/create-table`, {
         method: 'POST',
         headers: {
@@ -19,7 +19,7 @@ export const createTable = async (tableData: any) => {
 }
 
 export const getTable = async () => {
-    const baseRoute = process.env.NEXT_APP_BASE_URL;
+    const baseRoute = process.env.NEXT_PUBLIC_APP_BASE_URL || '';
     const response = await fetch(`${baseRoute}/api/create-table`, {
         method: 'GET',
     });
